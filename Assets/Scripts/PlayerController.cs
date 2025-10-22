@@ -4,6 +4,7 @@ public class PlayerController:MonoBehaviour {
 
     public Vector3 jump;
     public Rigidbody rb;
+    public bool isDead = false;
 
     public float speed = 3.0f;
     public float jumpForce = 4.0f;
@@ -41,5 +42,15 @@ public class PlayerController:MonoBehaviour {
     
     void OnCollisionStay() {
     	isGrounded = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Check if fish is touched
+        if (collision.collider.CompareTag("Fish"))
+        {
+            isDead = true;
+            Debug.Log("ONO U DED! :(((");
+        }
     }
 }
