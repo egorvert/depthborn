@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Renderer))]
 public class PlayerMovement : MonoBehaviour {
     [Header("References")]
     public Vector3 movement;
@@ -17,7 +18,6 @@ public class PlayerMovement : MonoBehaviour {
     [Header("Player Settings")]
     public float oxygen; // how much "air" the player has left
     public float waterResistance;
-    private bool isDead = false;
 
     // movement
     [Header("Movement Settings")]
@@ -33,88 +33,55 @@ public class PlayerMovement : MonoBehaviour {
     private float moveZ;
 
     void Start() {
+        // make the colour magenta so it's easier to see
         Renderer platformRenderer = GetComponent<Renderer>();
         platformRenderer.material.SetColor("_Color", Color.magenta);
         
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
+        rb.freezeRotation = true; // prevent it from spinning
 
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked; // capture cursor
         Cursor.visible = false;
     }
 
     void Update() {
+        // update movement with latest input
         moveX = Input.GetAxis("Vertical");
         moveZ = Input.GetAxis("Horizontal");
 
         movement = new(moveX, 0f, moveZ);
         movement *= movementSpeed;
 
+        // also check if user wants to jump, and whether the player's on the ground
         if (Input.GetButtonDown("Jump") && isGrounded) jump = true;
-
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
     }
 
     private void FixedUpdate() {
+        // in the future there'll be buoyancy and drag implemented here
         // float buoyancy = gravity * oxygen;
         HandleMovement();
         HandleJump();
     }
 
     private void HandleMovement() {
+        // for the physics implementation we're going with we're doing
+        // a-level kinematics. Vfinal - Vinitial = delta V.
+        // this is so we can use unity's physics and colliders.
         Vector3 targetV = transform.TransformDirection(movement);
         Vector3 currentV = rb.velocity;
-
         Vector3 deltaV = new(targetV.x - currentV.x, 0, targetV.z - currentV.z);
+
+        // clamp acceleration so it doesn't go haywire
         deltaV = Vector3.ClampMagnitude(deltaV, acceleration * Time.fixedDeltaTime);
         rb.AddForce(deltaV, ForceMode.VelocityChange);
     }
 
     private void HandleJump() {
+        // juuuuump up in the aaaair
         if (jump && isGrounded) {
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
             jump = false;
         }
-    }
-
-    void OnCollisionStay() {
-        isGrounded = true;
-    }
-
-    private void OnCollisionEnter(Collision collision) {
-        if (collision.collider.CompareTag("Fish"))
-        {
-            UnityEngine.Debug.Log("ONO U DED! :(((");
-            Die();
-        }
-    }
-
-    // --- Added: death/respawn ---
-
-    public void Die() {
-        if (isDead) return;
-        isDead = true;
-
-        UnityEngine.Debug.Log("Respawning...");
-        // Put death VFX/SFX/animation hooks here in the future
-
-        Respawn();
-
-        isDead = false;
-    }
-
-    private void Respawn()
-    {
-        // Find the last checkpoint activated (falls back to starting checkpoint or Vector3.zero)
-        Vector3 pos = CheckpointManager.Instance.GetRespawnPosition();
-        Quaternion rot = CheckpointManager.Instance.GetRespawnRotation();
-        UnityEngine.Debug.Log($"Respawning to {pos} with rotation {rot}");
-
-        // Reset physics before teleport to avoid carry-over momentum
-        // rb.velocity = Vector3.zero;
-        // rb.angularVelocity = Vector3.zero;
-
-        transform.position = pos;
-        transform.rotation = rot;
     }
 }
