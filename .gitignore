@@ -74,3 +74,8 @@ crashlytics-build.properties
 .vscode/
 .editorconfig
 .DS_Store
+
+Scenes/EgorSandbox.unity
+Scenes/RidwanSandbox.unity
+Scenes/ChrisSandbox.unity
+Scenes/TibetSandbox.unity

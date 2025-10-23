@@ -28,6 +28,10 @@ public class PlayerMovement : MonoBehaviour {
     private bool jump = false;
     private bool isGrounded; // whether the player is on the ground/a platform
 
+    [Header("Camera Reference")]
+    public Transform cameraTransform; // 3rd person camera, not "Main"
+
+
     // input vars
     private float moveX;
     private float moveZ;
@@ -65,10 +69,23 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void HandleMovement() {
-        // for the physics implementation we're going with we're doing
-        // a-level kinematics. Vfinal - Vinitial = delta V.
-        // this is so we can use unity's physics and colliders.
-        Vector3 targetV = transform.TransformDirection(movement);
+        /* imagine the player and the camera in 3d space. we don't know which "angle"
+        either one is pointing towards, we have no compass. we just know their
+        relative positions.
+
+        we can make it so that the camera is always "behind" the player
+        by doing some math.*/
+        Vector3 camLateral = transform.position - cameraTransform.position;
+        camLateral.y = 0f;
+        camLateral.Normalize();
+
+        Vector3 camOrbital = Vector3.Cross(Vector3.up, camLateral);
+
+        /* for the physics implementation we're going with we're doing
+        a-level kinematics. Vfinal - Vinitial = delta V.
+        this is so we can use unity's physics and colliders. 
+        also factoring in the camera offsets. */
+        Vector3 targetV = camLateral * movement.x + camOrbital * movement.z;
         Vector3 currentV = rb.velocity;
         Vector3 deltaV = new(targetV.x - currentV.x, 0, targetV.z - currentV.z);
 
