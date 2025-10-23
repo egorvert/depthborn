@@ -4,5 +4,9 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/EgorSandbox.unity
+    guid: 16c8dc51e50ad49978ad69b13a61db69
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0
