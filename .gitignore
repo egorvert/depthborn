@@ -75,7 +75,7 @@ crashlytics-build.properties
 .editorconfig
 .DS_Store
 
-Scenes/EgorSandbox.unity
-Scenes/RidwanSandbox.unity
-Scenes/ChrisSandbox.unity
-Scenes/TibetSandbox.unity
+Assets/Scenes/EgorSandbox.unity
+Assets/Scenes/RidwanSandbox.unity
+Assets/Scenes/ChrisSandbox.unity
+Assets/Scenes/TibetSandbox.unity
