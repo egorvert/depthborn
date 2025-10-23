@@ -9,7 +9,7 @@ public class PlayerController1 : MonoBehaviour
     public bool isGrounded;
 
     private Vector3 inputDir;
-    private bool onSlipperySurface = false; // track slippery contact
+    private bool onSlipperySurface = false; // tracks slippery contact
 
     void Start()
     {
