@@ -60,14 +60,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // --- Added: death/respawn ---
-
     public void Die()
     {
         if (isDead) return;
         isDead = true;
 
         UnityEngine.Debug.Log("Respawning...");
+
         // Put death VFX/SFX/animation hooks here in the future
 
         Respawn();
@@ -88,5 +87,7 @@ public class PlayerController : MonoBehaviour
 
         transform.position = pos;
         transform.rotation = rot;
+
+        speed = 3.0f; // reset speed value
     }
 }

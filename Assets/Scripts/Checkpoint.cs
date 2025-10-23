@@ -19,6 +19,7 @@ public class Checkpoint : MonoBehaviour
         if (CheckpointManager.Instance.SetCheckpoint(this))
         {
             PlayActivationEffect();
+            PlayerBoost();
         }
         UnityEngine.Debug.Log("Checkpoint set!");
     }
@@ -31,6 +32,16 @@ public class Checkpoint : MonoBehaviour
         if (activationEffect)
         {
             activationEffect.Play();
+        }
+    }
+
+    public void PlayerBoost()
+    {
+        PlayerController player = FindObjectOfType<PlayerController>();
+        if (player != null)
+        {
+            player.speed += 1.0f; // increase speed 
+            UnityEngine.Debug.Log("Player speed boosted!");
         }
     }
 }
