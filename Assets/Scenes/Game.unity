@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028292, g: 0.22571306, b: 0.30692118, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571363, b: 0.30692217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -291,7 +291,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 571587539}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: platfornms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -632,7 +632,6 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
-  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -714,29 +713,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &963194229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a97f617059b8443cb88aaeb4441920d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 1543660397}
-  offset: {x: 0, y: 2, z: 0}
-  distance: 3
-  minDistance: 1
-  maxDistance: 5
-  scrollSpeed: 2
-  mouseSensitivity: 3
-  joystickSensitivity: 100
-  minVerticalAngle: 30
-  maxVerticalAngle: 80
-  smoothSpeed: 5
 --- !u!1 &1184426345
 GameObject:
   m_ObjectHideFlags: 0
@@ -750,7 +726,7 @@ GameObject:
   - component: {fileID: 1184426348}
   - component: {fileID: 1184426347}
   - component: {fileID: 1184426350}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: am i a floor or am i a skybox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -868,7 +844,7 @@ GameObject:
   - component: {fileID: 1372528632}
   - component: {fileID: 1372528631}
   - component: {fileID: 1372528634}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: cowardly crescenfloor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1091,7 +1067,7 @@ GameObject:
   - component: {fileID: 1526404418}
   - component: {fileID: 1526404417}
   - component: {fileID: 1526404420}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: floor in the sky
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1207,10 +1183,10 @@ GameObject:
   - component: {fileID: 1543660397}
   - component: {fileID: 1543660396}
   - component: {fileID: 1543660395}
-  - component: {fileID: 1543660400}
-  - component: {fileID: 1543660393}
   - component: {fileID: 1543660399}
-  - component: {fileID: 1543660398}
+  - component: {fileID: 1543660402}
+  - component: {fileID: 1543660401}
+  - component: {fileID: 1543660403}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -1218,33 +1194,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!54 &1543660393
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1543660392}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!23 &1543660395
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1310,23 +1259,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1543660398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1543660392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7443e1669f3a24625b99de9570f25252, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jump: {x: 0, y: 0, z: 0}
-  rb: {fileID: 0}
-  speed: 3
-  jumpForce: 2
-  isGrounded: 0
 --- !u!114 &1543660399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1357,7 +1289,34 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!65 &1543660400
+--- !u!54 &1543660401
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543660392}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &1543660402
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1378,6 +1337,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1543660403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543660392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f49a898651e8941358fb7d1be0071a1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movement: {x: 0, y: 0, z: 0}
+  rb: {fileID: 0}
+  waterDrag: 0
+  waterAngularDrag: 0
+  gravity: -9.81
+  acceleration: 120
+  oxygen: 0
+  waterResistance: 0
+  movementSpeed: 10
+  jumpSpeed: 6
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 2147483648
+  groundCheckDistance: 1.1
 --- !u!1 &1565530656
 GameObject:
   m_ObjectHideFlags: 0
@@ -1390,7 +1375,7 @@ GameObject:
   - component: {fileID: 1565530659}
   - component: {fileID: 1565530658}
   - component: {fileID: 1565530657}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1497,7 +1482,7 @@ GameObject:
   - component: {fileID: 1973156508}
   - component: {fileID: 1973156507}
   - component: {fileID: 1973156510}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
