@@ -72,5 +72,10 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 .vscode/
+<<<<<<< HEAD
 
 .DS_Store
+=======
+.editorconfig
+.DS_store
+>>>>>>> ebee9a5 (added ds_store to gitignore)
