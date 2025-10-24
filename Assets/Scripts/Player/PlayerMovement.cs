@@ -29,6 +29,10 @@ public class PlayerMovementMerged : MonoBehaviour
     private float moveX;
     private float moveZ;
 
+    // Moving Platform
+    private MovingPlatform currentPlatform;
+    private Vector3 platformMovement;
+   
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -55,9 +59,13 @@ public class PlayerMovementMerged : MonoBehaviour
         movement = new Vector3(moveX, 0f, moveZ) * movementSpeed;
 
         // Jump input (only when grounded)
-        if (Input.GetButtonDown("Jump") && isGrounded)
-            jump = true;
+        if (Input.GetButtonDown("Jump") && isGrounded) jump = true;
     }
+    
+    public void setOnPlatform(MovingPlatform platform) {
+        currentPlatform = platform;
+    }
+
 
     private void FixedUpdate()
     {
@@ -66,12 +74,18 @@ public class PlayerMovementMerged : MonoBehaviour
         isGrounded = Physics.Raycast(rayOrigin, Vector3.down, groundCheckDistance + 0.3f, groundMask);
 
         // Fallback: treat very low vertical velocity as grounded
-        if (!isGrounded && Mathf.Abs(rb.velocity.y) < 0.05f)
-            isGrounded = true;
+        if (!isGrounded && Mathf.Abs(rb.velocity.y) < 0.05f) isGrounded = true;
+            
+        if (currentPlatform != null) {
+            platformMovement = currentPlatform.platformVelocity * Time.fixedDeltaTime;
+            rb.MovePosition(rb.position + platformMovement);
+        }
 
         // Visualize the ground check ray (green = grounded, red = air)
         Debug.DrawRay(rayOrigin, Vector3.down * (groundCheckDistance + 0.3f), isGrounded ? Color.green : Color.red);
-
+        
+        // in the future there'll be buoyancy and drag implemented here
+        // float buoyancy = gravity * oxygen;
         HandleMovement();
         HandleJump();
     }
