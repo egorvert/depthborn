@@ -36,6 +36,10 @@ public class PlayerMovement : MonoBehaviour {
     private float moveX;
     private float moveZ;
 
+    // Moving Platform
+    private MovingPlatform currentPlatform;
+    private Vector3 platformMovement;
+
     void Start() {
         // make the colour magenta so it's easier to see
         Renderer platformRenderer = GetComponent<Renderer>();
@@ -60,8 +64,20 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetButtonDown("Jump") && isGrounded) jump = true;
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
     }
+    
+    public void setOnPlatform(MovingPlatform platform) {
+        currentPlatform = platform;
+    }
 
     private void FixedUpdate() {
+        // get platform movement
+        if (currentPlatform != null) {
+            platformMovement = currentPlatform.platformVelocity * Time.fixedDeltaTime;
+            rb.MovePosition(rb.position + platformMovement);
+        }
+
+
+
         // in the future there'll be buoyancy and drag implemented here
         // float buoyancy = gravity * oxygen;
         HandleMovement();
