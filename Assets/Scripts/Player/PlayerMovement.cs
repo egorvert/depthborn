@@ -52,8 +52,7 @@ public class PlayerMovement : MonoBehaviour {
         Cursor.visible = false;
     }
 
-    void Update()
-    {
+    void Update() {
         // update movement with latest input
         moveX = Input.GetAxis("Vertical");
         moveZ = Input.GetAxis("Horizontal");
