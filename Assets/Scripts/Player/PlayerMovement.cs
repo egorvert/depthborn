@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Renderer))]
-public class PlayerMovementMerged : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
     public Vector3 movement;
@@ -32,7 +32,7 @@ public class PlayerMovementMerged : MonoBehaviour
     // Moving Platform
     private MovingPlatform currentPlatform;
     private Vector3 platformMovement;
-   
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -61,8 +61,9 @@ public class PlayerMovementMerged : MonoBehaviour
         // Jump input (only when grounded)
         if (Input.GetButtonDown("Jump") && isGrounded) jump = true;
     }
-    
-    public void setOnPlatform(MovingPlatform platform) {
+
+    public void setOnPlatform(MovingPlatform platform)
+    {
         currentPlatform = platform;
     }
 
@@ -75,15 +76,16 @@ public class PlayerMovementMerged : MonoBehaviour
 
         // Fallback: treat very low vertical velocity as grounded
         if (!isGrounded && Mathf.Abs(rb.velocity.y) < 0.05f) isGrounded = true;
-            
-        if (currentPlatform != null) {
+
+        if (currentPlatform != null)
+        {
             platformMovement = currentPlatform.platformVelocity * Time.fixedDeltaTime;
             rb.MovePosition(rb.position + platformMovement);
         }
 
         // Visualize the ground check ray (green = grounded, red = air)
         Debug.DrawRay(rayOrigin, Vector3.down * (groundCheckDistance + 0.3f), isGrounded ? Color.green : Color.red);
-        
+
         // in the future there'll be buoyancy and drag implemented here
         // float buoyancy = gravity * oxygen;
         HandleMovement();

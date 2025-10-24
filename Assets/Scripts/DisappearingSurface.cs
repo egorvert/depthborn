@@ -19,7 +19,7 @@ public class DisappearingSurface : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {       //if player has touched surface and if surface is not already disappearing
-        if (!isTriggered && collision.gameObject.GetComponent<PlayerMovementMerged>() != null)
+        if (!isTriggered && collision.gameObject.GetComponent<PlayerMovement>() != null)
         {
             isTriggered = true;
             StartCoroutine(DisappearAndReturn()); //timer for disappear cycle
