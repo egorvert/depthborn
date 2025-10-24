@@ -2,103 +2,123 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Renderer))]
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovementMerged : MonoBehaviour
+{
     [Header("References")]
     public Vector3 movement;
     public Rigidbody rb;
 
-    // enviromental constants
     [Header("Physics Settings")]
-    public float waterDrag; // inverse to the resistance mechanic
-    public float waterAngularDrag; // turning left/right
-    public float gravity = -9.81f; // gravity
     public float acceleration = 120f;
 
-    // player constants
-    [Header("Player Settings")]
-    public float oxygen; // how much "air" the player has left
-    public float waterResistance;
-
-    // movement
     [Header("Movement Settings")]
-    public float movementSpeed = 10f; // movement speed
-    public float jumpSpeed = 6f; // jump speed
+    public float movementSpeed = 10f;
+    public float jumpSpeed = 6f;
     public LayerMask groundMask;
     public float groundCheckDistance = 1.1f;
     private bool jump = false;
-    private bool isGrounded; // whether the player is on the ground/a platform
+    private bool isGrounded;
 
     [Header("Camera Reference")]
-    public Transform cameraTransform; // 3rd person camera, not "Main"
+    public Transform cameraTransform; // Automatically assigned if null
 
+    // Sticky surface detection
+    private bool onStickySurface = false;
 
-    // input vars
+    // Input values
     private float moveX;
     private float moveZ;
 
-    void Start() {
-        // make the colour magenta so it's easier to see
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+
+        // Auto-assign main camera if not manually set
+        if (cameraTransform == null && Camera.main != null)
+            cameraTransform = Camera.main.transform;
+
+        // Make the player magenta for visual clarity
         Renderer platformRenderer = GetComponent<Renderer>();
         platformRenderer.material.SetColor("_Color", Color.magenta);
-        
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true; // prevent it from spinning
 
-        Cursor.lockState = CursorLockMode.Locked; // capture cursor
+        // Lock the cursor to the screen center
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    void Update() {
-        // update movement with latest input
+    void Update()
+    {
+        // Gather player input
         moveX = Input.GetAxis("Vertical");
         moveZ = Input.GetAxis("Horizontal");
+        movement = new Vector3(moveX, 0f, moveZ) * movementSpeed;
 
-        movement = new(moveX, 0f, moveZ);
-        movement *= movementSpeed;
-
-        // also check if user wants to jump, and whether the player's on the ground
-        if (Input.GetButtonDown("Jump") && isGrounded) jump = true;
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
+        // Jump input (only when grounded)
+        if (Input.GetButtonDown("Jump") && isGrounded)
+            jump = true;
     }
 
-    private void FixedUpdate() {
-        // in the future there'll be buoyancy and drag implemented here
-        // float buoyancy = gravity * oxygen;
+    private void FixedUpdate()
+    {
+        // Ground detection ray (slightly extended for reliability)
+        Vector3 rayOrigin = transform.position + Vector3.up * 0.2f;
+        isGrounded = Physics.Raycast(rayOrigin, Vector3.down, groundCheckDistance + 0.3f, groundMask);
+
+        // Fallback: treat very low vertical velocity as grounded
+        if (!isGrounded && Mathf.Abs(rb.velocity.y) < 0.05f)
+            isGrounded = true;
+
+        // Visualize the ground check ray (green = grounded, red = air)
+        Debug.DrawRay(rayOrigin, Vector3.down * (groundCheckDistance + 0.3f), isGrounded ? Color.green : Color.red);
+
         HandleMovement();
         HandleJump();
     }
 
-    private void HandleMovement() {
-        /* imagine the player and the camera in 3d space. we don't know which "angle"
-        either one is pointing towards, we have no compass. we just know their
-        relative positions.
+    private void HandleMovement()
+    {
+        if (cameraTransform == null) return;
 
-        we can make it so that the camera is always "behind" the player
-        by doing some math.*/
+        // Calculate camera-relative movement directions
         Vector3 camLateral = transform.position - cameraTransform.position;
         camLateral.y = 0f;
         camLateral.Normalize();
-
         Vector3 camOrbital = Vector3.Cross(Vector3.up, camLateral);
 
-        /* for the physics implementation we're going with we're doing
-        a-level kinematics. Vfinal - Vinitial = delta V.
-        this is so we can use unity's physics and colliders. 
-        also factoring in the camera offsets. */
+        // Compute horizontal movement velocity change
         Vector3 targetV = camLateral * movement.x + camOrbital * movement.z;
         Vector3 currentV = rb.velocity;
-        Vector3 deltaV = new(targetV.x - currentV.x, 0, targetV.z - currentV.z);
+        Vector3 deltaV = new Vector3(targetV.x - currentV.x, 0f, targetV.z - currentV.z);
 
-        // clamp acceleration so it doesn't go haywire
+        // Reduces control on sticky surfaces
+        if (onStickySurface)
+            deltaV *= 0.1f;
+
+        // Limits acceleration to prevent fast dashes
         deltaV = Vector3.ClampMagnitude(deltaV, acceleration * Time.fixedDeltaTime);
         rb.AddForce(deltaV, ForceMode.VelocityChange);
     }
 
-    private void HandleJump() {
-        // juuuuump up in the aaaair
-        if (jump && isGrounded) {
+    private void HandleJump()
+    {
+        if (jump && isGrounded)
+        {
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
             jump = false;
         }
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        // Detects sticky surfaces without changing grounded state
+        onStickySurface = collision.collider.GetComponent<StickySurface>() != null;
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        // Reset sticky state when leaving the surface
+        if (collision.collider.GetComponent<StickySurface>() != null)
+            onStickySurface = false;
     }
 }
