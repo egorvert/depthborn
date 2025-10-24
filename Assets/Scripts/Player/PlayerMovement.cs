@@ -9,10 +9,22 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody rb;
 
     [Header("Physics Settings")]
+<<<<<<< HEAD
     public float acceleration = 120f;
     public Vector3 boxSize = new Vector3(0.2f, 0.2f, 0.2f);
     private Vector3 halfBoxSize;
 
+=======
+    public float gravity = -9.81f; // gravity
+    public float acceleration = 60f;
+
+    // player constants
+    [Header("Player Settings")]
+    [Range(0f, 100f)] public float oxygen; // how much "air" the player has left
+    public float waterResistance = 0.4f; // how easily the player can swim
+                                        // 0: full drag - 1: no drag
+    // movement
+>>>>>>> c9f1819 (broken physics)
     [Header("Movement Settings")]
     public float movementSpeed = 10f;
     public float jumpSpeed = 6f;
@@ -75,6 +87,7 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log(isGrounded);
     }
 
+<<<<<<< HEAD
     public void setOnPlatform(MovingPlatform platform)
     {
         currentPlatform = platform;
@@ -95,6 +108,17 @@ public class PlayerMovement : MonoBehaviour
 
         // in the future there'll be buoyancy and drag implemented here
         // float buoyancy = gravity * oxygen;
+=======
+    private void FixedUpdate() {
+    if (rb.velocity.y < 0f) {
+        float effectiveGravity = oxygen / 100 * gravity;
+        Vector3 buoyancy = Vector3.up * -effectiveGravity;
+        rb.AddForce(buoyancy, ForceMode.Acceleration);
+    } else {
+        rb.AddForce(Vector3.up * gravity, ForceMode.Acceleration);
+    }
+        
+>>>>>>> c9f1819 (broken physics)
         HandleMovement();
         HandleJump();
     }
@@ -121,12 +145,19 @@ public class PlayerMovement : MonoBehaviour
         Vector3 currentV = rb.velocity;
         Vector3 deltaV = new Vector3(targetV.x - currentV.x, 0f, targetV.z - currentV.z);
 
+<<<<<<< HEAD
         // Reduces control on sticky surfaces
         if (onStickySurface)
             deltaV *= 0.1f;
 
         // Limits acceleration to prevent fast dashes
         deltaV = Vector3.ClampMagnitude(deltaV, acceleration * Time.fixedDeltaTime);
+=======
+        float effectiveAcceleration = acceleration * waterResistance;
+
+        // clamp acceleration so it doesn't go haywire
+        deltaV = Vector3.ClampMagnitude(deltaV, effectiveAcceleration * Time.fixedDeltaTime);
+>>>>>>> c9f1819 (broken physics)
         rb.AddForce(deltaV, ForceMode.VelocityChange);
     }
 
