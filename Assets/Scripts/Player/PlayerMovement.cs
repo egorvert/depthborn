@@ -9,16 +9,14 @@ public class PlayerMovement : MonoBehaviour {
 
     // enviromental constants
     [Header("Physics Settings")]
-    public float waterDrag; // inverse to the resistance mechanic
-    public float waterAngularDrag; // turning left/right
     public float gravity = -9.81f; // gravity
-    public float acceleration = 120f;
+    public float acceleration = 60f;
 
     // player constants
     [Header("Player Settings")]
-    public float oxygen; // how much "air" the player has left
-    public float waterResistance;
-
+    [Range(0f, 100f)] public float oxygen; // how much "air" the player has left
+    public float waterResistance = 0.4f; // how easily the player can swim
+                                        // 0: full drag - 1: no drag
     // movement
     [Header("Movement Settings")]
     public float movementSpeed = 10f; // movement speed
@@ -62,8 +60,14 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        // in the future there'll be buoyancy and drag implemented here
-        // float buoyancy = gravity * oxygen;
+    if (rb.velocity.y < 0f) {
+        float effectiveGravity = oxygen / 100 * gravity;
+        Vector3 buoyancy = Vector3.up * -effectiveGravity;
+        rb.AddForce(buoyancy, ForceMode.Acceleration);
+    } else {
+        rb.AddForce(Vector3.up * gravity, ForceMode.Acceleration);
+    }
+        
         HandleMovement();
         HandleJump();
     }
@@ -89,8 +93,10 @@ public class PlayerMovement : MonoBehaviour {
         Vector3 currentV = rb.velocity;
         Vector3 deltaV = new(targetV.x - currentV.x, 0, targetV.z - currentV.z);
 
+        float effectiveAcceleration = acceleration * waterResistance;
+
         // clamp acceleration so it doesn't go haywire
-        deltaV = Vector3.ClampMagnitude(deltaV, acceleration * Time.fixedDeltaTime);
+        deltaV = Vector3.ClampMagnitude(deltaV, effectiveAcceleration * Time.fixedDeltaTime);
         rb.AddForce(deltaV, ForceMode.VelocityChange);
     }
 
