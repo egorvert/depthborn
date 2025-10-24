@@ -937,7 +937,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449578594}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.23909426, y: 0.5942804, z: -0.19104356, w: 0.74375206}
+  m_LocalRotation: {x: 0.23909426, y: 0.5942804, z: -0.19104357, w: 0.74375206}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1065,7 +1065,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 475352240}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.25254768, y: 0.59071684, z: -0.20179327, w: 0.7392921}
+  m_LocalRotation: {x: 0.2525477, y: 0.5907167, z: -0.20179324, w: 0.7392922}
   m_LocalPosition: {x: -1.449048, y: 2.6, z: 1.3230011}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2978,7 +2978,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1485714143}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.25254768, y: 0.59071684, z: -0.20179324, w: 0.7392921}
+  m_LocalRotation: {x: 0.25254768, y: 0.5907168, z: -0.20179324, w: 0.73929214}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -13556,8 +13556,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishRigidbody: {fileID: 1904650485}
   fishModel: {fileID: 1904650483}
-  speed: 4
-  wiggleSpeed: 5
+  speed: 2
+  wiggleSpeed: 7
   wiggleAmount: 15
 --- !u!1 &1973156505
 GameObject:
