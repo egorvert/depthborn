@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028292, g: 0.22571306, b: 0.30692118, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1065,7 +1065,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 475352240}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2525477, y: 0.5907167, z: -0.20179324, w: 0.7392922}
+  m_LocalRotation: {x: 0.25254768, y: 0.59071684, z: -0.20179327, w: 0.7392921}
   m_LocalPosition: {x: -1.449048, y: 2.6, z: 1.3230011}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2978,7 +2978,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1485714143}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.25254768, y: 0.5907168, z: -0.20179324, w: 0.73929214}
+  m_LocalRotation: {x: 0.25254768, y: 0.59071684, z: -0.20179324, w: 0.7392921}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8464,7 +8464,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656212745}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.26595324, y: 0.5869486, z: -0.21250471, w: 0.7345761}
+  m_LocalRotation: {x: 0.2659532, y: 0.5869486, z: -0.2125047, w: 0.7345761}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -13558,7 +13558,7 @@ MonoBehaviour:
   fishModel: {fileID: 1904650483}
   speed: 4
   wiggleSpeed: 5
-  wiggleAmount: 20
+  wiggleAmount: 15
 --- !u!1 &1973156505
 GameObject:
   m_ObjectHideFlags: 0
