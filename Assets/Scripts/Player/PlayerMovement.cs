@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public float movementSpeed = 10f;
     public float jumpSpeed = 6f;
     public LayerMask groundMask;
-    public float groundCheckDistance = 1.1f;
+    public float groundCheckDistance = 5f;
     private bool jump = false;
     private bool isGrounded;
 
@@ -71,11 +71,8 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // Ground detection ray (slightly extended for reliability)
-        Vector3 rayOrigin = transform.position + Vector3.up * 0.2f;
-        isGrounded = Physics.Raycast(rayOrigin, Vector3.down, groundCheckDistance + 0.3f, groundMask);
-
-        // Fallback: treat very low vertical velocity as grounded
-        if (!isGrounded && Mathf.Abs(rb.velocity.y) < 0.05f) isGrounded = true;
+        Vector3 rayOrigin = transform.position + Vector3.up;
+        isGrounded = Physics.Raycast(rayOrigin, Vector3.down, groundCheckDistance, groundMask);
 
         if (currentPlatform != null)
         {
@@ -122,6 +119,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
             jump = false;
+            isGrounded = false;
         }
     }
 
