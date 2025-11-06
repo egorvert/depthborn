@@ -15,8 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public float movementSpeed = 10f;
     public float jumpSpeed = 6f;
     public LayerMask groundMask;
-    public float groundCheckDistance = 5f;
-    private bool jump = false;
+    public float groundCheckDistance = 0.3f;
     private bool isGrounded;
 
     [Header("Camera Reference")]
@@ -62,23 +61,10 @@ public class PlayerMovement : MonoBehaviour
         moveZ = Input.GetAxis("Horizontal");
         movement = new Vector3(moveX, 0f, moveZ) * movementSpeed;
 
-        // Jump input (only when grounded)
-        if ((Input.GetButtonDown("Jump") && isGrounded) || jumpBufferCounter > 0) jump = true;
-
-        Debug.Log(isGrounded);
-
         // Jump Buffering
         if (Input.GetButtonDown("Jump"))
         {
             jumpBufferCounter = jumpBufferDelay;
-        }
-        else if (jumpBufferCounter < 0)
-        {
-            jumpBufferCounter = 0;
-        } 
-        else
-        {
-            jumpBufferCounter -= Time.deltaTime;
         }
     }
 
@@ -91,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // Ground detection ray (slightly extended for reliability)
-        Vector3 rayOrigin = transform.position + Vector3.up;
+        Vector3 rayOrigin = transform.position + Vector3.up * 0.1f;
         isGrounded = Physics.Raycast(rayOrigin, Vector3.down, groundCheckDistance, groundMask);
 
         if (currentPlatform != null)
@@ -132,11 +118,19 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleJump()
     {
-        if (jump && isGrounded)
+        if (jumpBufferCounter > 0)
+            jumpBufferCounter -= Time.fixedDeltaTime;
+
+        if (isGrounded && (Input.GetButtonDown("Jump") || jumpBufferCounter > 0))
         {
+            // Cancel existing vertical movement before jumping to reset velocity
+            Vector3 v = rb.velocity;
+            v.y = 0;
+            rb.velocity = v;
+
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
-            jump = false;
             isGrounded = false;
+            jumpBufferCounter = 0;
         }
     }
 
