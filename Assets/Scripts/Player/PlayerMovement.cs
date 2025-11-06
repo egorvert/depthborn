@@ -33,6 +33,10 @@ public class PlayerMovement : MonoBehaviour
     private MovingPlatform currentPlatform;
     private Vector3 platformMovement;
 
+    // Jump Buffer
+    private float jumpBufferDelay = 0.2f;
+    private float jumpBufferCounter;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -59,7 +63,23 @@ public class PlayerMovement : MonoBehaviour
         movement = new Vector3(moveX, 0f, moveZ) * movementSpeed;
 
         // Jump input (only when grounded)
-        if (Input.GetButtonDown("Jump") && isGrounded) jump = true;
+        if ((Input.GetButtonDown("Jump") && isGrounded) || jumpBufferCounter > 0) jump = true;
+
+        Debug.Log(isGrounded);
+
+        // Jump Buffering
+        if (Input.GetButtonDown("Jump"))
+        {
+            jumpBufferCounter = jumpBufferDelay;
+        }
+        else if (jumpBufferCounter < 0)
+        {
+            jumpBufferCounter = 0;
+        } 
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
     }
 
     public void setOnPlatform(MovingPlatform platform)
@@ -79,9 +99,6 @@ public class PlayerMovement : MonoBehaviour
             platformMovement = currentPlatform.platformVelocity * Time.fixedDeltaTime;
             rb.MovePosition(rb.position + platformMovement);
         }
-
-        // Visualize the ground check ray (green = grounded, red = air)
-        Debug.DrawRay(rayOrigin, Vector3.down * (groundCheckDistance + 0.3f), isGrounded ? Color.green : Color.red);
 
         // in the future there'll be buoyancy and drag implemented here
         // float buoyancy = gravity * oxygen;
