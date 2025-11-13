@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Physics Settings")]
     public float acceleration = 120f;
+    public Vector3 boxSize = new Vector3(0.2f, 0.2f, 0.2f);
+    private Vector3 halfBoxSize;
 
     [Header("Movement Settings")]
     public float movementSpeed = 10f;
@@ -52,6 +54,9 @@ public class PlayerMovement : MonoBehaviour
         // Lock the cursor to the screen center
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        // Get half box size for isGrounded check
+        halfBoxSize = 0.5f * boxSize;
     }
 
     void Update()
@@ -66,6 +71,8 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpBufferCounter = jumpBufferDelay;
         }
+
+        Debug.Log(isGrounded);
     }
 
     public void setOnPlatform(MovingPlatform platform)
@@ -76,9 +83,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Ground detection ray (slightly extended for reliability)
-        Vector3 rayOrigin = transform.position + Vector3.up * 0.1f;
-        isGrounded = Physics.Raycast(rayOrigin, Vector3.down, groundCheckDistance, groundMask);
+
+        // Check if the player is grounded
+        groundCheck();
 
         if (currentPlatform != null)
         {
@@ -90,6 +97,13 @@ public class PlayerMovement : MonoBehaviour
         // float buoyancy = gravity * oxygen;
         HandleMovement();
         HandleJump();
+    }
+
+    private void groundCheck()
+    {
+        // Ground detection ray (slightly extended for reliability)
+        Vector3 boxOrigin = transform.position + Vector3.up * 0.1f;
+        isGrounded = Physics.BoxCast(boxOrigin, halfBoxSize, Vector3.down, out RaycastHit hitInfo, Quaternion.identity, groundCheckDistance, groundMask);
     }
 
     private void HandleMovement()
