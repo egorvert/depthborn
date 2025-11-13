@@ -15,8 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public float movementSpeed = 10f;
     public float jumpSpeed = 6f;
     public LayerMask groundMask;
-    public float groundCheckDistance = 5f;
-    private bool jump = false;
+    public float groundCheckDistance = 0.3f;
     private bool isGrounded;
 
     [Header("Camera Reference")]
@@ -32,6 +31,10 @@ public class PlayerMovement : MonoBehaviour
     // Moving Platform
     private MovingPlatform currentPlatform;
     private Vector3 platformMovement;
+
+    // Jump Buffer
+    private float jumpBufferDelay = 0.2f;
+    private float jumpBufferCounter;
 
     void Start()
     {
@@ -58,8 +61,11 @@ public class PlayerMovement : MonoBehaviour
         moveZ = Input.GetAxis("Horizontal");
         movement = new Vector3(moveX, 0f, moveZ) * movementSpeed;
 
-        // Jump input (only when grounded)
-        if (Input.GetButtonDown("Jump") && isGrounded) jump = true;
+        // Jump Buffering
+        if (Input.GetButtonDown("Jump"))
+        {
+            jumpBufferCounter = jumpBufferDelay;
+        }
     }
 
     public void setOnPlatform(MovingPlatform platform)
@@ -71,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // Ground detection ray (slightly extended for reliability)
-        Vector3 rayOrigin = transform.position + Vector3.up;
+        Vector3 rayOrigin = transform.position + Vector3.up * 0.1f;
         isGrounded = Physics.Raycast(rayOrigin, Vector3.down, groundCheckDistance, groundMask);
 
         if (currentPlatform != null)
@@ -79,9 +85,6 @@ public class PlayerMovement : MonoBehaviour
             platformMovement = currentPlatform.platformVelocity * Time.fixedDeltaTime;
             rb.MovePosition(rb.position + platformMovement);
         }
-
-        // Visualize the ground check ray (green = grounded, red = air)
-        Debug.DrawRay(rayOrigin, Vector3.down * (groundCheckDistance + 0.3f), isGrounded ? Color.green : Color.red);
 
         // in the future there'll be buoyancy and drag implemented here
         // float buoyancy = gravity * oxygen;
@@ -115,11 +118,19 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleJump()
     {
-        if (jump && isGrounded)
+        if (jumpBufferCounter > 0)
+            jumpBufferCounter -= Time.fixedDeltaTime;
+
+        if (isGrounded && (Input.GetButtonDown("Jump") || jumpBufferCounter > 0))
         {
+            // Cancel existing vertical movement before jumping to reset velocity
+            Vector3 v = rb.velocity;
+            v.y = 0;
+            rb.velocity = v;
+
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
-            jump = false;
             isGrounded = false;
+            jumpBufferCounter = 0;
         }
     }
 

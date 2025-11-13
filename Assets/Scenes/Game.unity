@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028292, g: 0.22571306, b: 0.30692118, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1065,7 +1065,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 475352240}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2525477, y: 0.5907167, z: -0.20179324, w: 0.7392922}
+  m_LocalRotation: {x: 0.25254768, y: 0.59071684, z: -0.20179327, w: 0.7392921}
   m_LocalPosition: {x: -1.449048, y: 2.6, z: 1.3230011}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2129,6 +2129,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Narrow Platform (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 9112670628482819283, guid: 6a4190ed257c6406ba836a29efd26ac6, type: 3}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2978,7 +2982,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1485714143}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.25254768, y: 0.5907168, z: -0.20179324, w: 0.73929214}
+  m_LocalRotation: {x: 0.25254768, y: 0.59071684, z: -0.20179324, w: 0.7392921}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8180,7 +8184,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 2147483648
-  groundCheckDistance: 1.1
+  groundCheckDistance: 0.3
   cameraTransform: {fileID: 1776159691}
 --- !u!114 &1543660404
 MonoBehaviour:
@@ -8572,7 +8576,7 @@ MonoBehaviour:
   m_XAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 300
+    m_MaxSpeed: 260
     m_AccelTime: 0.1
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
@@ -19041,6 +19045,10 @@ PrefabInstance:
     - target: {fileID: 4680460817528114247, guid: 9517b2c9978964586807d23f7041bdc1, type: 3}
       propertyPath: m_Name
       value: Tiny Sticky Platform
+      objectReference: {fileID: 0}
+    - target: {fileID: 4680460817528114247, guid: 9517b2c9978964586807d23f7041bdc1, type: 3}
+      propertyPath: m_Layer
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 5834427656292040408, guid: 9517b2c9978964586807d23f7041bdc1, type: 3}
       propertyPath: m_LocalPosition.x
