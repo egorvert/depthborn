@@ -154,6 +154,14 @@ public class PlayerMovement : MonoBehaviour
         onStickySurface = collision.collider.GetComponent<StickySurface>() != null;
     }
 
+    public void ForceJump(float jumpVelocity)
+    {
+        Vector3 v = rb.velocity;
+        v.y = 0f;             // reset current vertical speed
+        rb.velocity = v;
+        rb.AddForce(Vector3.up * jumpVelocity, ForceMode.VelocityChange);
+    }
+
     void OnCollisionExit(Collision collision)
     {
         // Reset sticky state when leaving the surface
