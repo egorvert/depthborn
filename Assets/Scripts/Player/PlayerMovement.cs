@@ -71,8 +71,6 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpBufferCounter = jumpBufferDelay;
         }
-
-        Debug.Log(isGrounded);
     }
 
     public void setOnPlatform(MovingPlatform platform)
