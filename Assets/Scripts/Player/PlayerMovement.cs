@@ -1,12 +1,16 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Renderer))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
+	[SerializeField] private InputActionReference jumpAction;
+	[SerializeField] private InputActionReference moveAction;
     public Vector3 movement;
     public Rigidbody rb;
+	private Vector2 moveInput;
 
     [Header("Physics Settings")]
     public float acceleration = 120f;
@@ -34,9 +38,21 @@ public class PlayerMovement : MonoBehaviour
     private MovingPlatform currentPlatform;
     private Vector3 platformMovement;
 
-    // Jump Buffer
+    // Jump and movement
     private float jumpBufferDelay = 0.2f;
     private float jumpBufferCounter;
+	
+	void OnEnable()
+	{
+		moveAction.action.Enable();
+		jumpAction.action.Enable();
+	}
+
+	void OnDisable()
+	{
+		moveAction.action.Disable();
+		jumpAction.action.Disable();
+	}
 
     void Start()
     {
@@ -62,12 +78,13 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // Gather player input
-        moveX = Input.GetAxis("Vertical");
-        moveZ = Input.GetAxis("Horizontal");
+		moveInput = moveAction.action.ReadValue<Vector2>();
+        moveX = moveInput.y;
+        moveZ = moveInput.x;
         movement = new Vector3(moveX, 0f, moveZ) * movementSpeed;
 
         // Jump Buffering
-        if (Input.GetButtonDown("Jump"))
+        if (jumpAction.action.WasPressedThisFrame())
         {
             jumpBufferCounter = jumpBufferDelay;
         }
@@ -133,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
         if (jumpBufferCounter > 0)
             jumpBufferCounter -= Time.fixedDeltaTime;
 
-        if (isGrounded && (Input.GetButtonDown("Jump") || jumpBufferCounter > 0))
+        if (isGrounded && jumpBufferCounter > 0)
         {
             // Cancel existing vertical movement before jumping to reset velocity
             Vector3 v = rb.velocity;
