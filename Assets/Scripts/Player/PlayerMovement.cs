@@ -9,28 +9,23 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody rb;
 
     [Header("Physics Settings")]
-<<<<<<< HEAD
     public float acceleration = 120f;
     public Vector3 boxSize = new Vector3(0.2f, 0.2f, 0.2f);
     private Vector3 halfBoxSize;
 
-=======
-    public float gravity = -9.81f; // gravity
-    public float acceleration = 60f;
-
-    // player constants
-    [Header("Player Settings")]
-    [Range(0f, 100f)] public float oxygen; // how much "air" the player has left
-    public float waterResistance = 0.4f; // how easily the player can swim
-                                        // 0: full drag - 1: no drag
-    // movement
->>>>>>> c9f1819 (broken physics)
     [Header("Movement Settings")]
     public float movementSpeed = 10f;
-    public float jumpSpeed = 6f;
+    public float jumpSpeed = 5f;
+    public float fallMultiplier = 2f; // makes falling faster
     public LayerMask groundMask;
     public float groundCheckDistance = 0.3f;
     private bool isGrounded;
+
+    [Header("Oxygen & Buoyancy")]
+    public float maxOxygen = 100f;
+    public float currentOxygen = 100f;
+    public float minJumpMultiplier = 0.8f; // jump at 0% oxygen
+    public float maxJumpMultiplier = 1.2f; // jump at 100% oxygen
 
     [Header("Camera Reference")]
     public Transform cameraTransform; // Automatically assigned if null
@@ -87,16 +82,34 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log(isGrounded);
     }
 
-<<<<<<< HEAD
     public void setOnPlatform(MovingPlatform platform)
     {
         currentPlatform = platform;
     }
 
+    // Public methods for external scripts to modify oxygen
+    public void AddOxygen(float amount)
+    {
+        currentOxygen = Mathf.Clamp(currentOxygen + amount, 0f, maxOxygen);
+    }
+
+    public void RemoveOxygen(float amount)
+    {
+        currentOxygen = Mathf.Max(currentOxygen - amount, 0f);
+    }
+
+    public void SetOxygen(float amount)
+    {
+        currentOxygen = Mathf.Clamp(amount, 0f, maxOxygen);
+    }
+
+    public float GetOxygenPercent()
+    {
+        return currentOxygen / maxOxygen;
+    }
 
     private void FixedUpdate()
     {
-
         // Check if the player is grounded
         groundCheck();
 
@@ -106,21 +119,9 @@ public class PlayerMovement : MonoBehaviour
             rb.MovePosition(rb.position + platformMovement);
         }
 
-        // in the future there'll be buoyancy and drag implemented here
-        // float buoyancy = gravity * oxygen;
-=======
-    private void FixedUpdate() {
-    if (rb.velocity.y < 0f) {
-        float effectiveGravity = oxygen / 100 * gravity;
-        Vector3 buoyancy = Vector3.up * -effectiveGravity;
-        rb.AddForce(buoyancy, ForceMode.Acceleration);
-    } else {
-        rb.AddForce(Vector3.up * gravity, ForceMode.Acceleration);
-    }
-        
->>>>>>> c9f1819 (broken physics)
         HandleMovement();
         HandleJump();
+        HandleFallSpeed();
     }
 
     private void groundCheck()
@@ -145,19 +146,12 @@ public class PlayerMovement : MonoBehaviour
         Vector3 currentV = rb.velocity;
         Vector3 deltaV = new Vector3(targetV.x - currentV.x, 0f, targetV.z - currentV.z);
 
-<<<<<<< HEAD
         // Reduces control on sticky surfaces
         if (onStickySurface)
             deltaV *= 0.1f;
 
         // Limits acceleration to prevent fast dashes
         deltaV = Vector3.ClampMagnitude(deltaV, acceleration * Time.fixedDeltaTime);
-=======
-        float effectiveAcceleration = acceleration * waterResistance;
-
-        // clamp acceleration so it doesn't go haywire
-        deltaV = Vector3.ClampMagnitude(deltaV, effectiveAcceleration * Time.fixedDeltaTime);
->>>>>>> c9f1819 (broken physics)
         rb.AddForce(deltaV, ForceMode.VelocityChange);
     }
 
@@ -168,14 +162,26 @@ public class PlayerMovement : MonoBehaviour
 
         if (isGrounded && (Input.GetButtonDown("Jump") || jumpBufferCounter > 0))
         {
+            // Calculate jump force based on oxygen percentage (buoyancy)
+            float oxygenPercent = currentOxygen / maxOxygen;
+            float jumpMultiplier = Mathf.Lerp(minJumpMultiplier, maxJumpMultiplier, oxygenPercent);
+            
             // Cancel existing vertical movement before jumping to reset velocity
             Vector3 v = rb.velocity;
             v.y = 0;
             rb.velocity = v;
 
-            rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * jumpSpeed * jumpMultiplier, ForceMode.Impulse);
             isGrounded = false;
             jumpBufferCounter = 0;
+        }
+    }
+
+    private void HandleFallSpeed()
+    {
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
         }
     }
 
