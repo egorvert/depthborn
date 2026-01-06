@@ -1,12 +1,16 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Renderer))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
+	[SerializeField] private InputActionReference jumpAction;
+	[SerializeField] private InputActionReference moveAction;
     public Vector3 movement;
     public Rigidbody rb;
+	private Vector2 moveInput;
 
     [Header("Physics Settings")]
     public float acceleration = 120f;
@@ -15,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement Settings")]
     public float movementSpeed = 10f;
-    public float jumpSpeed = 5f;
+    public float jumpSpeed = 6f;
     public float fallMultiplier = 2f; // makes falling faster
     public LayerMask groundMask;
     public float groundCheckDistance = 0.3f;
@@ -24,8 +28,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Oxygen & Buoyancy")]
     public float maxOxygen = 100f;
     public float currentOxygen = 100f;
-    public float minJumpMultiplier = 0.8f; // jump at 0% oxygen
-    public float maxJumpMultiplier = 1.2f; // jump at 100% oxygen
+    public float oxygenCostPerJump = 10f; // how much oxygen each jump costs
+    public float minJumpMultiplier = 0.5f; // jump at 0% oxygen
+    public float maxJumpMultiplier = 1.5f; // jump at 100% oxygen
 
     [Header("Camera Reference")]
     public Transform cameraTransform; // Automatically assigned if null
@@ -41,9 +46,21 @@ public class PlayerMovement : MonoBehaviour
     private MovingPlatform currentPlatform;
     private Vector3 platformMovement;
 
-    // Jump Buffer
+    // Jump and movement
     private float jumpBufferDelay = 0.2f;
     private float jumpBufferCounter;
+	
+	void OnEnable()
+	{
+		moveAction.action.Enable();
+		jumpAction.action.Enable();
+	}
+
+	void OnDisable()
+	{
+		moveAction.action.Disable();
+		jumpAction.action.Disable();
+	}
 
     void Start()
     {
@@ -69,17 +86,16 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // Gather player input
-        moveX = Input.GetAxis("Vertical");
-        moveZ = Input.GetAxis("Horizontal");
+		moveInput = moveAction.action.ReadValue<Vector2>();
+        moveX = moveInput.y;
+        moveZ = moveInput.x;
         movement = new Vector3(moveX, 0f, moveZ) * movementSpeed;
 
         // Jump Buffering
-        if (Input.GetButtonDown("Jump"))
+        if (jumpAction.action.WasPressedThisFrame())
         {
             jumpBufferCounter = jumpBufferDelay;
         }
-
-        Debug.Log(isGrounded);
     }
 
     public void setOnPlatform(MovingPlatform platform)
@@ -155,23 +171,25 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(deltaV, ForceMode.VelocityChange);
     }
 
-    private void HandleJump()
-    {
+    private void HandleJump() {
         if (jumpBufferCounter > 0)
             jumpBufferCounter -= Time.fixedDeltaTime;
 
-        if (isGrounded && (Input.GetButtonDown("Jump") || jumpBufferCounter > 0))
-        {
+        if (isGrounded && jumpBufferCounter > 0) {
             // Calculate jump force based on oxygen percentage (buoyancy)
             float oxygenPercent = currentOxygen / maxOxygen;
             float jumpMultiplier = Mathf.Lerp(minJumpMultiplier, maxJumpMultiplier, oxygenPercent);
-            
+
             // Cancel existing vertical movement before jumping to reset velocity
             Vector3 v = rb.velocity;
             v.y = 0;
             rb.velocity = v;
 
-            rb.AddForce(Vector3.up * jumpSpeed * jumpMultiplier, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * (jumpSpeed * jumpMultiplier), ForceMode.Impulse);
+
+            // Drain oxygen from jumping
+            RemoveOxygen(oxygenCostPerJump);
+
             isGrounded = false;
             jumpBufferCounter = 0;
         }
@@ -181,7 +199,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (rb.velocity.y < 0)
         {
-            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
+            rb.velocity += Vector3.up * (Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime);
         }
     }
 

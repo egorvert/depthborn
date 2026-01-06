@@ -19,6 +19,11 @@ public class Checkpoint : MonoBehaviour
         if (CheckpointManager.Instance.SetCheckpoint(this))
         {
             PlayActivationEffect();
+        
+            // Reset player oxygen when touching checkpoint
+            PlayerMovement pm = other.GetComponent<PlayerMovement>();
+            if (pm)
+                pm.SetOxygen(pm.maxOxygen);
         }
         UnityEngine.Debug.Log("Checkpoint set!");
     }
