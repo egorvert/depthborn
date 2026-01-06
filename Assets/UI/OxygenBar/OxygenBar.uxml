@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="OxygenBarBG" style="flex-grow: 1; position: absolute; width: 20%; height: 6%; background-color: rgba(190, 190, 190, 0); background-image: url(&apos;project://database/Assets/Fishes%20And%20Underwater%20Environment%20Set/4.materials/environment_tex.png?fileID=2800000&amp;guid=51f9b716683bc4e47a10e558819b1822&amp;type=3#environment_tex&apos;); top: 25px; left: 25px;">
+        <ui:VisualElement name="OxygenBarMask" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; overflow: hidden;">
+            <ui:VisualElement name="OxygenBarFill" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/TextMesh%20Pro/Sprites/EmojiOne.png?fileID=2800000&amp;guid=dffef66376be4fa480fb02b19edbe903&amp;type=3#EmojiOne&apos;); position: absolute; width: 95%; height: 85%; align-self: center; -unity-text-align: upper-left; -unity-background-scale-mode: stretch-to-fill; align-items: auto; top: auto; bottom: auto; left: auto; right: auto;" />
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="OxygenLabel" style="position: absolute; height: 100%; -unity-text-align: middle-left; font-size: 28px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-right: 0; padding-bottom: 0; padding-top: 0; padding-left: 50px;" />
+    </ui:VisualElement>
+</ui:UXML>
