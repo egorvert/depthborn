@@ -3,15 +3,15 @@ using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerHealth : MonoBehaviour {
-
     public Rigidbody rb;
-	private PlayerInventory playerInventory;
-
-	private float lastDeathTime;
+    public PlayerMovement pm;
+    
+    private PlayerInventory playerInventory;
+	  private float lastDeathTime;
 
     void Start() {
         rb = GetComponent<Rigidbody>();
-		playerInventory = GetComponent<PlayerInventory>();
+		    playerInventory = GetComponent<PlayerInventory>();
     }
 
     private void OnCollisionEnter(Collision collision) {
@@ -45,6 +45,10 @@ public class PlayerHealth : MonoBehaviour {
 
         transform.position = pos;
         transform.rotation = rot;
+    
+        // Reset oxygen to max
+        if (pm)
+            pm.SetOxygen(pm.maxOxygen);
     }
 
 }
