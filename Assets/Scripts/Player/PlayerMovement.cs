@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Renderer))]
@@ -56,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
     // Jump and movement
     private float jumpBufferDelay = 0.2f;
     private float jumpBufferCounter;
+	public UnityEvent<PlayerMovement> OnJump;
 	
 	void OnEnable()
 	{
@@ -216,6 +218,8 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(Vector3.up * (jumpSpeed * jumpMultiplier), ForceMode.Impulse);
 
             RemoveOxygen(oxygenCostPerJump);
+			OnJump.Invoke(this);
+
 
             isGrounded = false;
             jumpBufferCounter = 0;
