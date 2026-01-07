@@ -2,8 +2,8 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerHealth : MonoBehaviour {
-
     public Rigidbody rb;
+    public PlayerMovement pm;
     private bool isDead = false;
 
     void Start() {
@@ -43,6 +43,10 @@ public class PlayerHealth : MonoBehaviour {
 
         transform.position = pos;
         transform.rotation = rot;
+    
+        // Reset oxygen to max
+        if (pm)
+            pm.SetOxygen(pm.maxOxygen);
     }
 
 }
