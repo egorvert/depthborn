@@ -7,11 +7,11 @@ public class PlayerHealth : MonoBehaviour {
     public PlayerMovement pm;
     
     private PlayerInventory playerInventory;
-	  private float lastDeathTime;
+	private float lastDeathTime;
 
     void Start() {
         rb = GetComponent<Rigidbody>();
-		    playerInventory = GetComponent<PlayerInventory>();
+		playerInventory = GetComponent<PlayerInventory>();
     }
 
     private void OnCollisionEnter(Collision collision) {
