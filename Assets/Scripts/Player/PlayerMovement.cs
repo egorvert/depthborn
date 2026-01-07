@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
     // Jump and movement
     private float jumpBufferDelay = 0.2f;
     private float jumpBufferCounter;
-	public UnityEvent<PlayerMovement> OnJump;
+	public UnityEvent<PlayerMovement> OnSetOxygen;
 	
 	void OnEnable()
 	{
@@ -128,16 +128,19 @@ public class PlayerMovement : MonoBehaviour
     public void AddOxygen(float amount)
     {
         currentOxygen = Mathf.Clamp(currentOxygen + amount, 0f, maxOxygen);
+		OnSetOxygen.Invoke(this);
     }
 
     public void RemoveOxygen(float amount)
     {
         currentOxygen = Mathf.Max(currentOxygen - amount, 0f);
+		OnSetOxygen.Invoke(this);
     }
 
     public void SetOxygen(float amount)
     {
         currentOxygen = Mathf.Clamp(amount, 0f, maxOxygen);
+		OnSetOxygen.Invoke(this);
     }
 
     public float GetOxygenPercent()
@@ -218,8 +221,6 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(Vector3.up * (jumpSpeed * jumpMultiplier), ForceMode.Impulse);
 
             RemoveOxygen(oxygenCostPerJump);
-			OnJump.Invoke(this);
-
 
             isGrounded = false;
             jumpBufferCounter = 0;
