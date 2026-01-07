@@ -18,7 +18,8 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private float defaultSensitivity = 1.0f;
     private float currentSensitivity;
 	
-	[Header("Pause panel")]
+	[Header("UI Panels")]
+	public GameObject OverlayUI;
 	public GameObject pauseMenuUI;
 	public GameObject pauseButtonGroup;
 	public GameObject settingsButtonGroup;
@@ -82,6 +83,7 @@ public class PauseMenu : MonoBehaviour
 	
 	public void Pause()
     {
+		OverlayUI.SetActive(false);
         pauseMenuUI.SetActive(true);
 		settingsButtonGroup.SetActive(false);
 
@@ -127,6 +129,7 @@ public class PauseMenu : MonoBehaviour
         if (message == "PauseFadeOutComplete")
         {
             pauseMenuUI.SetActive(false);
+			OverlayUI.SetActive(true);
         }
 	}
 	

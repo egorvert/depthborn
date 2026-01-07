@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CheckpointManager : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class CheckpointManager : MonoBehaviour
     public Checkpoint startingCheckpoint;
 
     public Checkpoint CurrentCheckpoint { get; private set; }
+	
+	// Handles initial stopwatch logic with interrupt
+	public UnityEvent OnTimerStart;
+	private bool isTimerStart = false;
+	private bool isStartingCheckpointSet = false;
 
     private void Awake()
     {
@@ -19,11 +25,18 @@ public class CheckpointManager : MonoBehaviour
         if (startingCheckpoint)
         {
             SetCheckpoint(startingCheckpoint, initialize: true);
+			isStartingCheckpointSet = true;
         }
     }
 
     public bool SetCheckpoint(Checkpoint cp, bool initialize = false)
     {
+		// flag stopwatch interrupt 
+		if (!isTimerStart && isStartingCheckpointSet){
+			OnTimerStart.Invoke();
+			isTimerStart = true;
+		}
+		
         if (CurrentCheckpoint == cp && !initialize) return false;
 
         CurrentCheckpoint = cp;
