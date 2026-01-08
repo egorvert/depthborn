@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028292, g: 0.22571306, b: 0.30692118, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -94,7 +94,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: a8ba1aa924eed495783bd718bc804979, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -2231,7 +2231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 1
+  m_BindingMode: 4
   m_FollowOffset: {x: 0, y: 5, z: -2}
   m_XDamping: 1
   m_YDamping: 1
@@ -2606,7 +2606,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449578594}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5301793, y: 0.00000004126405, z: -0.00000002580224, w: 0.84788555}
+  m_LocalRotation: {x: 0.5301793, y: 0.000000014589046, z: -0.00000000912247, w: 0.8478856}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2625,6 +2625,7 @@ GameObject:
   - component: {fileID: 475352244}
   - component: {fileID: 475352243}
   - component: {fileID: 475352241}
+  - component: {fileID: 475352245}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2726,12 +2727,40 @@ Transform:
   m_GameObject: {fileID: 475352240}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5606287, y: -0.00000006169582, z: 0.0000000417701, w: 0.8280673}
-  m_LocalPosition: {x: 1.477, y: 5.1, z: -0.014999986}
+  m_LocalPosition: {x: 3.167, y: 5.012, z: 0.6010001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &475352245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475352240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e264d9682c199d24c9c47940b203bd7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useWaterSpecificDepth: 0
+  waterLayers:
+    serializedVersion: 2
+    m_Bits: 144
+  shader: {fileID: 4800000, guid: 79fb928291e08d945865336b14983f48, type: 3}
+  depthColor: {r: 0, g: 0.42, b: 0.87, a: 1}
+  depthStart: -12
+  depthEnd: 98
+  depthLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  currentWaterMaterial: {fileID: 0}
+  pixelOffset: 0.02
+  noiseScale: 1
+  noiseFrequency: 2.2
+  noiseSpeed: 3.8
 --- !u!1 &491865864
 GameObject:
   m_ObjectHideFlags: 0
@@ -4822,7 +4851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 1
+  m_BindingMode: 4
   m_FollowOffset: {x: 0, y: 5, z: -2}
   m_XDamping: 1
   m_YDamping: 1
@@ -6275,7 +6304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 1
+  m_BindingMode: 4
   m_FollowOffset: {x: 0, y: 5, z: -2}
   m_XDamping: 1
   m_YDamping: 1
@@ -8331,7 +8360,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1485714143}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.54547393, y: 0.000000016123332, z: -0.000000010493456, w: 0.8381278}
+  m_LocalRotation: {x: 0.54547393, y: -0.000000014421142, z: 0.000000009385629, w: 0.83812785}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -15203,8 +15232,8 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 1543660397}
-  m_Follow: {fileID: 1543660397}
+  m_LookAt: {fileID: 47891043}
+  m_Follow: {fileID: 47891043}
   m_CommonLens: 1
   m_Lens:
     FieldOfView: 40
@@ -15276,7 +15305,7 @@ MonoBehaviour:
     m_RecenteringTime: 2
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
-  m_BindingMode: 1
+  m_BindingMode: 4
   m_SplineCurvature: 0.2
   m_Orbits:
   - m_Height: 5
@@ -15299,7 +15328,7 @@ Transform:
   m_GameObject: {fileID: 1776159688}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.477, y: 5.1, z: -0.014999986}
+  m_LocalPosition: {x: 3.167, y: 5.012, z: 0.6010001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -27375,7 +27404,7 @@ SceneRoots:
   - {fileID: 1776159691}
   - {fileID: 705507995}
   - {fileID: 1565530660}
-  - {fileID: 1543660397}
+  - {fileID: 573792720}
   - {fileID: 36462525}
   - {fileID: 571587539}
   - {fileID: 2894148}
@@ -27387,6 +27416,7 @@ SceneRoots:
   - {fileID: 6414989366170298509}
   - {fileID: 856555725}
   - {fileID: 201657684}
+  - {fileID: 1129782554}
   - {fileID: 2445157731788033780}
   - {fileID: 718553957}
   - {fileID: 582565461}
