@@ -7,7 +7,7 @@ public class Rebinding : MonoBehaviour
 {
     [Header("Actions")]
     [SerializeField] private InputActionReference jumpAction;
-    [SerializeField] private InputActionReference moveAction;
+    [SerializeField] private InputActionReference moveAction; // <-- the ONE Move action (Vector2)
 
     [Header("Jump UI")]
     [SerializeField] private Button jumpButton;
