@@ -333,7 +333,7 @@ MonoBehaviour:
   OnSetOxygen:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 166432202}
         m_TargetAssemblyTypeName: MagicPigGames.HorizontalProgressBar, Assembly-CSharp
         m_MethodName: UpdateOxygenBar
         m_Mode: 0
@@ -484,10 +484,10 @@ MonoBehaviour:
   OnCollected:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
-        m_MethodName: UpdateCollectableText
-        m_Mode: 0
+      - m_Target: {fileID: 47891045}
+        m_TargetAssemblyTypeName: PlayerInventory, Assembly-CSharp
+        m_MethodName: IncrementCollected
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -499,13 +499,13 @@ MonoBehaviour:
   OnDeath:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DeathUI, Assembly-CSharp
-        m_MethodName: UpdateDeathText
-        m_Mode: 2
+      - m_Target: {fileID: 47891045}
+        m_TargetAssemblyTypeName: PlayerInventory, Assembly-CSharp
+        m_MethodName: IncrementDeath
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 47891045}
-          m_ObjectArgumentAssemblyTypeName: PlayerInventory, Assembly-CSharp
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -640,6 +640,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &166432202 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 708417002079699161, guid: 05d8b6fc682e00c40a1c5c152be83034, type: 3}
+  m_PrefabInstance: {fileID: 956058039}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb5802e5d3c3472ca89151b0c6e3758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &179435594 stripped
@@ -1334,7 +1345,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449578594}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5301793, y: -0.000000014589038, z: 0.0000000091224654, w: 0.8478856}
+  m_LocalRotation: {x: 0.5301793, y: 0.000000014589046, z: -0.00000000912247, w: 0.8478856}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4143,7 +4154,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1485714143}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.54547393, y: -0.000000014421143, z: 0.00000000938563, w: 0.83812785}
+  m_LocalRotation: {x: 0.54547393, y: 0.0000000144211505, z: -0.0000000093856345, w: 0.83812785}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
