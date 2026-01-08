@@ -15,7 +15,7 @@ public class OxygenUI : MonoBehaviour
     void Start()
     {
         if (player == null)
-            player = FindFirstObjectByType<PlayerMovement>();
+            player = FindObjectOfType<PlayerMovement>();
     }
 
     void Update()
