@@ -2,15 +2,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Renderer))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
-	[SerializeField] private InputActionReference jumpAction;
-	[SerializeField] private InputActionReference moveAction;
+    [SerializeField] private InputActionReference jumpAction;
+    [SerializeField] private InputActionReference moveAction;
+    [SerializeField] private Animator animator;
     public Vector3 movement;
     public Rigidbody rb;
-	private Vector2 moveInput;
+    private Vector2 moveInput;
 
     [Header("Physics Settings")]
     public float acceleration = 120f;
@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Settings")]
     public float movementSpeed = 10f;
     public float jumpSpeed = 6f;
+    public float rotationSpeed = 10f;
     public LayerMask groundMask;
     public float groundCheckDistance = 0.3f;
     private bool isGrounded;
@@ -41,18 +42,18 @@ public class PlayerMovement : MonoBehaviour
     // Jump and movement
     private float jumpBufferDelay = 0.2f;
     private float jumpBufferCounter;
-	
-	void OnEnable()
-	{
-		moveAction.action.Enable();
-		jumpAction.action.Enable();
-	}
 
-	void OnDisable()
-	{
-		moveAction.action.Disable();
-		jumpAction.action.Disable();
-	}
+    void OnEnable()
+    {
+        moveAction.action.Enable();
+        jumpAction.action.Enable();
+    }
+
+    void OnDisable()
+    {
+        moveAction.action.Disable();
+        jumpAction.action.Disable();
+    }
 
     void Start()
     {
@@ -63,9 +64,9 @@ public class PlayerMovement : MonoBehaviour
         if (cameraTransform == null && Camera.main != null)
             cameraTransform = Camera.main.transform;
 
-        // Make the player magenta for visual clarity
-        Renderer platformRenderer = GetComponent<Renderer>();
-        platformRenderer.material.SetColor("_Color", Color.magenta);
+        // Auto-assign animator if not manually set
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
 
         // Lock the cursor to the screen center
         Cursor.lockState = CursorLockMode.Locked;
@@ -78,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // Gather player input
-		moveInput = moveAction.action.ReadValue<Vector2>();
+        moveInput = moveAction.action.ReadValue<Vector2>();
         moveX = moveInput.y;
         moveZ = moveInput.x;
         movement = new Vector3(moveX, 0f, moveZ) * movementSpeed;
@@ -136,6 +137,22 @@ public class PlayerMovement : MonoBehaviour
         Vector3 currentV = rb.velocity;
         Vector3 deltaV = new Vector3(targetV.x - currentV.x, 0f, targetV.z - currentV.z);
 
+        // Rotate player to face movement direction
+        if (targetV.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(targetV);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+        }
+
+        // Update animator parameters
+        if (animator != null)
+        {
+            float horizontalSpeed = new Vector3(currentV.x, 0f, currentV.z).magnitude;
+            animator.SetFloat("Speed", horizontalSpeed);
+            animator.SetBool("IsGrounded", isGrounded);
+            animator.SetFloat("VerticalVelocity", currentV.y);
+        }
+
         // Reduces control on sticky surfaces
         if (onStickySurface)
             deltaV *= 0.1f;
@@ -160,6 +177,10 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
             isGrounded = false;
             jumpBufferCounter = 0;
+
+            // Trigger jump animation
+            if (animator != null)
+                animator.SetTrigger("Jump");
         }
     }
 
