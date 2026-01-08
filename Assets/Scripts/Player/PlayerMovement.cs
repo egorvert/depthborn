@@ -1,5 +1,7 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
@@ -21,9 +23,23 @@ public class PlayerMovement : MonoBehaviour
     public float movementSpeed = 10f;
     public float jumpSpeed = 6f;
     public float rotationSpeed = 10f;
+    public float riseMultiplier = 0.8f; // 40% of gravity when rising (slow rise)
+    public float fallMultiplier = 2f; // makes falling faster
     public LayerMask groundMask;
     public float groundCheckDistance = 0.3f;
     private bool isGrounded;
+    
+    [Header("Progressive Speed")]
+    public float speedIncreasePerCheckpoint = 0.1f; // 10% faster per checkpoint
+    public float maxSpeedMultiplier = 2f;
+    private float currentSpeedMultiplier = 1f;
+
+    [Header("Oxygen & Buoyancy")]
+    public float maxOxygen = 100f;
+    public float currentOxygen = 100f;
+    public float oxygenCostPerJump = 10f; // how much oxygen each jump costs
+    public float minJumpMultiplier = 0.5f; // jump at 0% oxygen
+    public float maxJumpMultiplier = 0.7f; // jump at 100% oxygen
 
     [Header("Camera Reference")]
     public Transform cameraTransform; // Automatically assigned if null
@@ -42,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
     // Jump and movement
     private float jumpBufferDelay = 0.2f;
     private float jumpBufferCounter;
+    public UnityEvent<PlayerMovement> OnSetOxygen;
 
     void OnEnable()
     {
@@ -59,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         // Auto-assign main camera if not manually set
         if (cameraTransform == null && Camera.main != null)
@@ -82,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
         moveInput = moveAction.action.ReadValue<Vector2>();
         moveX = moveInput.y;
         moveZ = moveInput.x;
-        movement = new Vector3(moveX, 0f, moveZ) * movementSpeed;
+        movement = new Vector3(moveX, 0f, moveZ) * (movementSpeed * currentSpeedMultiplier);
 
         // Jump Buffering
         if (jumpAction.action.WasPressedThisFrame())
@@ -90,16 +108,57 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter = jumpBufferDelay;
         }
     }
+    
+    public void IncreaseSpeed()
+    {
+        currentSpeedMultiplier = Mathf.Min(currentSpeedMultiplier + speedIncreasePerCheckpoint, maxSpeedMultiplier);
+        Debug.Log($"Speed multiplier now: {currentSpeedMultiplier}");
+    }
+
+    public void ResetSpeedMultiplier()
+    {
+        currentSpeedMultiplier = 1f;
+    }
 
     public void setOnPlatform(MovingPlatform platform)
     {
         currentPlatform = platform;
     }
 
+    // Public methods for external scripts to modify oxygen
+    public void AddOxygen(float amount)
+    {
+        currentOxygen = Mathf.Clamp(currentOxygen + amount, 0f, maxOxygen);
+		OnSetOxygen.Invoke(this);
+    }
+
+    public void RemoveOxygen(float amount)
+    {
+        currentOxygen = Mathf.Max(currentOxygen - amount, 0f);
+		OnSetOxygen.Invoke(this);
+    }
+
+    public void SetOxygen(float amount)
+    {
+        currentOxygen = Mathf.Clamp(amount, 0f, maxOxygen);
+		OnSetOxygen.Invoke(this);
+    }
+
+    public float GetOxygenPercent()
+    {
+        return currentOxygen / maxOxygen;
+    }
+
+    public void ForceJump(float jumpVelocity)
+    {
+        Vector3 v = rb.velocity;
+        v.y = 0f;
+        rb.velocity = v;
+        rb.AddForce(Vector3.up * jumpVelocity, ForceMode.VelocityChange);
+    }
 
     private void FixedUpdate()
     {
-
         // Check if the player is grounded
         groundCheck();
 
@@ -109,10 +168,9 @@ public class PlayerMovement : MonoBehaviour
             rb.MovePosition(rb.position + platformMovement);
         }
 
-        // in the future there'll be buoyancy and drag implemented here
-        // float buoyancy = gravity * oxygen;
         HandleMovement();
         HandleJump();
+        HandleFallSpeed();
     }
 
     private void groundCheck()
@@ -124,7 +182,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleMovement()
     {
-        if (cameraTransform == null) return;
+        if (cameraTransform.IsUnityNull()) return;
 
         // Calculate camera-relative movement directions
         Vector3 camLateral = transform.position - cameraTransform.position;
@@ -132,8 +190,8 @@ public class PlayerMovement : MonoBehaviour
         camLateral.Normalize();
         Vector3 camOrbital = Vector3.Cross(Vector3.up, camLateral);
 
-        // Compute horizontal movement velocity change
-        Vector3 targetV = camLateral * movement.x + camOrbital * movement.z;
+        // Compute horizontal movement velocity change with speed multiplier
+        Vector3 targetV = (camLateral * movement.x + camOrbital * movement.z);
         Vector3 currentV = rb.velocity;
         Vector3 deltaV = new Vector3(targetV.x - currentV.x, 0f, targetV.z - currentV.z);
 
@@ -161,20 +219,26 @@ public class PlayerMovement : MonoBehaviour
         deltaV = Vector3.ClampMagnitude(deltaV, acceleration * Time.fixedDeltaTime);
         rb.AddForce(deltaV, ForceMode.VelocityChange);
     }
-
-    private void HandleJump()
-    {
+    
+    private void HandleJump() {
         if (jumpBufferCounter > 0)
             jumpBufferCounter -= Time.fixedDeltaTime;
 
-        if (isGrounded && jumpBufferCounter > 0)
-        {
-            // Cancel existing vertical movement before jumping to reset velocity
+        if (isGrounded && jumpBufferCounter > 0) {
+            // Calculate jump HEIGHT based on oxygen (not speed)
+            float oxygenPercent = currentOxygen / maxOxygen;
+            float jumpMultiplier = Mathf.Lerp(minJumpMultiplier, maxJumpMultiplier, oxygenPercent);
+
+            // Cancel existing vertical movement
             Vector3 v = rb.velocity;
             v.y = 0;
             rb.velocity = v;
 
-            rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+            // Apply constant speed but variable force for height
+            rb.AddForce(Vector3.up * (jumpSpeed * jumpMultiplier), ForceMode.Impulse);
+
+            RemoveOxygen(oxygenCostPerJump);
+
             isGrounded = false;
             jumpBufferCounter = 0;
 
@@ -184,18 +248,24 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void HandleFallSpeed()
+    {
+        if (rb.velocity.y > 0)
+        {
+            // Rising - slow it down (underwater drag)
+            rb.velocity += Vector3.up * (Physics.gravity.y * (riseMultiplier - 1) * Time.fixedDeltaTime);
+        }
+        else if (rb.velocity.y < 0)
+        {
+            // Falling - speed it up
+            rb.velocity += Vector3.up * (Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime);
+        }
+    }
+
     void OnCollisionStay(Collision collision)
     {
         // Detects sticky surfaces without changing grounded state
         onStickySurface = collision.collider.GetComponent<StickySurface>() != null;
-    }
-
-    public void ForceJump(float jumpVelocity)
-    {
-        Vector3 v = rb.velocity;
-        v.y = 0f;             // reset current vertical speed
-        rb.velocity = v;
-        rb.AddForce(Vector3.up * jumpVelocity, ForceMode.VelocityChange);
     }
 
     void OnCollisionExit(Collision collision)

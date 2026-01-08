@@ -1,17 +1,21 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerHealth : MonoBehaviour {
-
     public Rigidbody rb;
-    private bool isDead = false;
+    public PlayerMovement pm;
+    
+    private PlayerInventory playerInventory;
+	private float lastDeathTime;
 
     void Start() {
         rb = GetComponent<Rigidbody>();
+		playerInventory = GetComponent<PlayerInventory>();
     }
 
     private void OnCollisionEnter(Collision collision) {
-        if (collision.collider.CompareTag("Fish"))
+        if (collision.collider.CompareTag("Fish") && Time.time > lastDeathTime + 0.1f)
         {
             UnityEngine.Debug.Log("ONO U DED! :(((");
             Die();
@@ -20,15 +24,13 @@ public class PlayerHealth : MonoBehaviour {
 
     // --- Added: death/respawn ---
     public void Die() {
-        if (isDead) return;
-        isDead = true;
+        lastDeathTime = Time.time;
+		playerInventory.IncrementDeath();
         
         Debug.Log("Respawning...");
         // Put death VFX/SFX/animation hooks here in the future
 
         Respawn();
-
-        isDead = false;
     }
 
     private void Respawn() {
@@ -43,6 +45,10 @@ public class PlayerHealth : MonoBehaviour {
 
         transform.position = pos;
         transform.rotation = rot;
+    
+        // Reset oxygen to max
+        if (pm)
+            pm.SetOxygen(pm.maxOxygen);
     }
 
 }
