@@ -2022,7 +2022,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449578594}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5301793, y: -0.000000032622086, z: 0.000000020398453, w: 0.84788555}
+  m_LocalRotation: {x: 0.5301793, y: 0.000000032622083, z: -0.000000020398453, w: 0.84788555}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -15228,6 +15228,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Music
       objectReference: {fileID: 0}
+    - target: {fileID: 5171288188467703504, guid: e55988b1976de8b49a69600e2284f1b5, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171288188467703504, guid: e55988b1976de8b49a69600e2284f1b5, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: a076cf99227e7d549b1c9c003eebb2dd, type: 3}
+    - target: {fileID: 5171288188467703504, guid: e55988b1976de8b49a69600e2284f1b5, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -561654559432299665, guid: e91cf7e0839d73d4184abafdcd911d3f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

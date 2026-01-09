@@ -68,7 +68,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e6502b2c0e998469d85870f391918d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeDuration: 1
 --- !u!82 &5762105281509442445
 AudioSource:
   m_ObjectHideFlags: 0
@@ -78,7 +77,7 @@ AudioSource:
   m_GameObject: {fileID: 8892288737841441164}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -8717357194959298983, guid: e91cf7e0839d73d4184abafdcd911d3f, type: 2}
+  OutputAudioMixerGroup: {fileID: 4528904769797028254, guid: e91cf7e0839d73d4184abafdcd911d3f, type: 2}
   m_audioClip: {fileID: 8300000, guid: 79ef41d393ed5f6478d4d0f91bce5768, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
@@ -100,8 +99,8 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.05
-      value: 1
+      time: 0.31316072
+      value: 1.0038719
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -109,7 +108,7 @@ AudioSource:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.6361389
+      time: 0.8466797
       value: 0
       inSlope: -1.0526316
       outSlope: -1.0526316
