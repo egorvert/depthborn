@@ -10,6 +10,11 @@ public class Stopwatch : MonoBehaviour
 	private float elapsedTime;
 	private bool isStart = false;
 	
+	public float GetTime() 
+    { 
+        return elapsedTime; 
+    }
+	
     void Update()
     {
 		if (isStart){
