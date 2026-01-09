@@ -2,19 +2,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
 using Cinemachine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
-public class PauseMenu : MonoBehaviour
+public class MainMenu : MonoBehaviour
 {
-	[Header("Exit to scene")]
-    public string mainMenuSceneName = "Main Menu";
-	
-	[Header("Third Person Camera")]
-	[SerializeField] private CinemachineFreeLook freeLookCam;
-	[SerializeField] private float baseXSpeed = 0.025f;
-	[SerializeField] private float baseYSpeed = 0.1f;
+	[Header("Scene to load")]
+	public string gameSceneName = "Game";
 	
 	[Header("Sensitivity Setting")]
 	[SerializeField] private TMP_Text senseTextValue = null;
@@ -46,16 +41,10 @@ public class PauseMenu : MonoBehaviour
     private float currentSFXVolume = 1.0f;
 	
 	[Header("UI Panels")]
-	public GameObject OverlayUI;
 	public GameObject pauseMenuUI;
 	public GameObject pauseButtonGroup;
 	public GameObject settingsButtonGroup;
-	private bool isSettingsActive;
-
-	[Header("Pause key")]
-	public KeyCode pauseKey = KeyCode.P;
-
-	public bool isPaused { get; private set; }
+	public GameObject Title;
 	
 	public Animator pauseMenuAnimator;
 	public float fadeOutDuration = 0.5f;
@@ -64,16 +53,9 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {		
 		Time.timeScale = 1f;
-		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Locked;
-		isPaused = false;
-
-		// Start panels hidden
-		if (pauseMenuUI != null)
-			pauseMenuUI.SetActive(false);
-		
-		isSettingsActive = false;
-		
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+				
 		// Update UI to show current settings
 		if (PlayerPrefs.HasKey(sensitivityPrefKey))
 		{
@@ -149,63 +131,15 @@ public class PauseMenu : MonoBehaviour
 
         UpdateMusicText(currentMusicVolume);
         SetMixerVolume(musicParameter, currentMusicVolume);
-		
-		ApplySensitivityToCamera();
 	}
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(pauseKey) && !isSettingsActive){
-			if (isPaused){
-				Resume();
-			} else {
-				Pause();
-			}
-		}
-    }
 	
-	public void Pause()
-    {
-		OverlayUI.SetActive(false);
-        pauseMenuUI.SetActive(true);
-		settingsButtonGroup.SetActive(false);
-
-		if (freeLookCam) freeLookCam.enabled = false;
-		
-        Time.timeScale = 0f;
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-		
-		// Fade In
-		pauseMenuAnimator.Play("PauseMenu", 0, 0f);
-		
-        isPaused = true;
-    }
-
-    public void Resume()
+	public void PlayGame()
     {
 		PlayerPrefs.Save();
 		
-		// Fade Out
-		pauseMenuAnimator.Play("PauseMenu_fadeOut", 0, 0f);
-		
-        Time.timeScale = 1f;
-        Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Locked;
-        isPaused = false;
-		
-		if (freeLookCam) freeLookCam.enabled = true;
-
-		StartFadeOutAndDisable(pauseMenuUI);
-    }
-	
-	public void ExitToMainMenu()
-    {
-        Time.timeScale = 1f;
-        
-        // Load the menu scene
-        SceneManager.LoadScene(mainMenuSceneName);
+        // Loads the scene
+        SceneManager.LoadScene(gameSceneName);
+		Time.timeScale = 1f; 
     }
 	
 	private void StartFadeOutAndDisable(GameObject panelUI)
@@ -217,30 +151,15 @@ public class PauseMenu : MonoBehaviour
         }
     }
 	
-	// Disables pause panel after fade out
-	public void AlertObservers(string message)
-    {
-        if (message == "PauseFadeOutComplete")
-        {
-            pauseMenuUI.SetActive(false);
-			OverlayUI.SetActive(true);
-        }
-	}
-	
 	public void handleSettingsButton(){
 		settingsButtonGroup.SetActive(true);
-		
-		isSettingsActive = true;
-		
+		Title.SetActive(false);
 		pauseButtonGroup.SetActive(false);
 	}
 	
 	public void handleBackButton(){
-		// Fade Out
 		pauseButtonGroup.SetActive(true);
-		
-		isSettingsActive = false;
-		
+		Title.SetActive(true);
 		settingsButtonGroup.SetActive(false);
 	}
 	
@@ -255,21 +174,16 @@ public class PauseMenu : MonoBehaviour
 			senseSlider.value = sensitivity;
 		}
 		
-		ApplySensitivityToCamera();
 		PlayerPrefs.SetFloat(sensitivityPrefKey, currentSensitivity);
-	}
-	
-	private void ApplySensitivityToCamera(){
-		if (freeLookCam != null){
-			freeLookCam.m_XAxis.m_MaxSpeed = baseXSpeed * currentSensitivity;
-			freeLookCam.m_YAxis.m_MaxSpeed = baseYSpeed * currentSensitivity;
-		} else Debug.Log("no freelook");
 	}
 	
 	public void SetMasterVolume(float volume)
 	{
 		currentVolume = volume;
+		
 		UpdateMasterVolumeText(volume);
+
+		// Apply volume globally to the scene
 		AudioListener.volume = currentVolume;
 		
 		PlayerPrefs.SetFloat(masterVolumePrefKey, currentVolume);
@@ -314,10 +228,10 @@ public class PauseMenu : MonoBehaviour
     {
         currentMusicVolume = volume;
         UpdateMusicText(volume);
-        SetMixerVolume(musicParameter, volume); 
+        SetMixerVolume(musicParameter, volume);
 		
 		PlayerPrefs.SetFloat(musicPrefKey, currentMusicVolume);
-	}
+    }
 
     private void UpdateMusicText(float volume)
     {
