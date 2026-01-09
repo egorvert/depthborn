@@ -17,7 +17,8 @@ Alstra Infinite</a><br>
 <a href="https://assetstore.unity.com/packages/3d/characters/animals/fish/fish-polypack-202232">Fish PolyPack by 
 Alstra Infinite</a><br>
 <a href="https://assetstore.unity.com/packages/3d/props/chests-polypack-209167">Chests PolyPack by Alstra Infinite</a><br>
-
+<a href="https://assetstore.unity.com/packages/audio/ambient/nature/ambient-video-game-music-underwater-worlds-220371">Ambient Video Game Music by 
+Phat Phrog Studio</a><br>
 ### Tutorials
 <a href="https://www.youtube.com/watch?v=EfUCEwKmcjc">How to Collect Items by Ketra Games</a><br>
 <a href="https://youtu.be/Cq_Nnw_LwnI?si=E0B8zjUIyPfk8_Cy&t=1485">Creating a settings menu with sensitivity slider control (their volume slider repurposed) by SpeedTutor</a><br>
