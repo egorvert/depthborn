@@ -2,11 +2,15 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 using Cinemachine;
 using TMPro;
 
 public class PauseMenu : MonoBehaviour
 {
+	[Header("Exit to scene")]
+    public string mainMenuSceneName = "Main Menu";
+	
 	[Header("Third Person Camera")]
 	[SerializeField] private CinemachineFreeLook freeLookCam;
 	[SerializeField] private float baseXSpeed = 0.025f;
@@ -194,6 +198,14 @@ public class PauseMenu : MonoBehaviour
 		if (freeLookCam) freeLookCam.enabled = true;
 
 		StartFadeOutAndDisable(pauseMenuUI);
+    }
+	
+	public void ExitToMainMenu()
+    {
+        Time.timeScale = 1f;
+        
+        // Load the menu scene
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 	
 	private void StartFadeOutAndDisable(GameObject panelUI)
