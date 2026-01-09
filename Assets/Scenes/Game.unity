@@ -2817,7 +2817,27 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 2299155924948503839, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
+      propertyPath: pm
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2299155924948503839, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821984597547469604, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821984597547469604, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
+      propertyPath: OnSetOxygen.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5246734360159278799, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
+    - {fileID: 3653740616857652224, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
+    - {fileID: 8821984597547469604, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
+    - {fileID: 2299155924948503839, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
