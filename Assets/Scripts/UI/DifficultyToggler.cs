@@ -8,7 +8,7 @@ public class DifficultyToggler : MonoBehaviour
 	[Header("UI References")]
 	[SerializeField] private TMP_Text difficultyText;
 	
-	private string[] difficulties = { "Easy", "Medium", "Hard" };
+	private string[] difficulties = { "Easy", "Normal", "Hard" };
 	private int currentIndex = 1;
 	
 	private const string DifficultyKey = "SelectedDifficulty";
