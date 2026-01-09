@@ -2825,14 +2825,6 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 3704355161964114014, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
-      propertyPath: rb
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6218279483328321086, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
-      propertyPath: rb
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 8821984597547469604, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
       propertyPath: rb
       value: 
@@ -27180,6 +27172,7 @@ MonoBehaviour:
   fishRigidbody: {fileID: 1904650485}
   fishModel: {fileID: 1904650483}
   speed: 2
+  boundaryParent: {fileID: 802757313}
   wiggleSpeed: 7
   wiggleAmount: 15
 --- !u!1001 &1946363180
