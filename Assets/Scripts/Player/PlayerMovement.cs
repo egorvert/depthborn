@@ -92,6 +92,8 @@ public class PlayerMovement : MonoBehaviour
 
         // Get half box size for isGrounded check
         halfBoxSize = 0.5f * boxSize;
+		
+		ApplyDifficultySettings();
     }
 
     void Update()
@@ -274,4 +276,31 @@ public class PlayerMovement : MonoBehaviour
         if (collision.collider.GetComponent<StickySurface>() != null)
             onStickySurface = false;
     }
+	
+	private void ApplyDifficultySettings()
+	{
+		// 0 = Easy, 1 = Medium, 2 = Hard
+		int difficultyIndex = PlayerPrefs.GetInt("SelectedDifficulty", 1);
+
+		switch (difficultyIndex)
+		{
+			case 0: // EASY
+				maxOxygen = 100f;            // Max Oxygen
+				oxygenCostPerJump = 5f;      // Jumps cost less
+				break;
+
+			case 1: // MEDIUM (Default)
+				maxOxygen = 100f;
+				oxygenCostPerJump = 10f;
+				break;
+
+			case 2: // HARD
+				maxOxygen = 50f;             // Less Oxygen
+				oxygenCostPerJump = 20f;     // Jumps are expensive
+				break;
+		}
+
+		// Reset current oxygen to the new max
+		currentOxygen = maxOxygen;
+	}		
 }
