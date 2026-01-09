@@ -37,8 +37,8 @@ public class PauseMenu : MonoBehaviour
 	[SerializeField] private TMP_Text sfxTextValue = null;
     [SerializeField] private Slider sfxSlider = null;
     [SerializeField] private AudioMixer mainAudioMixer;
-    [SerializeField] private string sfxParameter = "SFXVolume";
-    [SerializeField] private string sfxPrefKey = "SFXVolume";
+    [SerializeField] private string sfxParameter = "EffectVolume";
+    [SerializeField] private string sfxPrefKey = "EffectVolume";
     private float currentSFXVolume = 1.0f;
 	
 	[Header("UI Panels")]
