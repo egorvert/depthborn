@@ -44,6 +44,7 @@ public class MainMenu : MonoBehaviour
 	public GameObject pauseMenuUI;
 	public GameObject pauseButtonGroup;
 	public GameObject settingsButtonGroup;
+	public GameObject Title;
 	
 	public Animator pauseMenuAnimator;
 	public float fadeOutDuration = 0.5f;
@@ -51,7 +52,7 @@ public class MainMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {		
-		Time.timeScale = 0f;
+		Time.timeScale = 1f;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 				
@@ -152,14 +153,13 @@ public class MainMenu : MonoBehaviour
 	
 	public void handleSettingsButton(){
 		settingsButtonGroup.SetActive(true);
-				
+		Title.SetActive(false);
 		pauseButtonGroup.SetActive(false);
 	}
 	
 	public void handleBackButton(){
-		// Fade Out
 		pauseButtonGroup.SetActive(true);
-				
+		Title.SetActive(true);
 		settingsButtonGroup.SetActive(false);
 	}
 	
