@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b538f8a571e0d044a89e28eac42fe6e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainMenuSceneName: Main Menu
   freeLookCam: {fileID: 0}
   baseXSpeed: 0.125
   baseYSpeed: 0.00125
@@ -63,8 +64,8 @@ MonoBehaviour:
   sfxTextValue: {fileID: 0}
   sfxSlider: {fileID: 0}
   mainAudioMixer: {fileID: 24100000, guid: e91cf7e0839d73d4184abafdcd911d3f, type: 2}
-  sfxParameter: SFXVolume
-  sfxPrefKey: SFXVolume
+  sfxParameter: EffectVolume
+  sfxPrefKey: EffectVolume
   OverlayUI: {fileID: 0}
   pauseMenuUI: {fileID: 0}
   pauseButtonGroup: {fileID: 0}
