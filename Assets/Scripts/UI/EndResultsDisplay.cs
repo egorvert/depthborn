@@ -7,7 +7,7 @@ public class EndResultsDisplay : MonoBehaviour
     public TMP_Text deathText;
     public TMP_Text collectablesText;
 	
-	private string chestText = " chests out of x!";
+	private string chestText = " chests!";
 
     void Start()
     {
@@ -23,7 +23,7 @@ public class EndResultsDisplay : MonoBehaviour
             deathText.text = "You died " + PlayerStats.FinalDeaths + " times,";
 
 		if (PlayerStats.FinalCollectables == 1){
-			chestText = " chest out of x!";
+			chestText = " chest!";
 		}
         if (collectablesText) 
             collectablesText.text = "You found " + PlayerStats.FinalCollectables + chestText;
