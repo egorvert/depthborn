@@ -6,9 +6,12 @@ public class FishMovement : MonoBehaviour
     public Transform fishModel;
     public float speed = 2f;
 
+    // Assign the parent transform that contains this fish's boundaries
+    public Transform boundaryParent;
+
     // Wiggles :)
     public float wiggleSpeed = 5f;
-    public float wiggleAmount = 15f; // Angle amount in 
+    public float wiggleAmount = 15f; // Angle amount in
 
     private Vector3 moveDirection;
     private float wiggleTimer = 0f;
@@ -47,6 +50,10 @@ public class FishMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("FishBoundary"))
         {
+            // Only respond to boundaries that belong to this fish
+            if (boundaryParent != null && !collision.transform.IsChildOf(boundaryParent))
+                return;
+
             Vector3 avgNormal = Vector3.zero;
 
             // Average all contact normals to handle corners
